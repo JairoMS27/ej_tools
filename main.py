@@ -81,7 +81,7 @@ def get_download_path_opt():
 
 def get_video_opts(url, quality, mute_audio=False):
     """Configures download options."""
-    height_map = {"4k": 2160, "1080p": 1080, "720p": 720, "480p": 480, "360p": 360}
+    height_map = {"4k": 2160, "2k": 1440, "1080p": 1080, "720p": 720, "480p": 480, "360p": 360}
     target_height = height_map.get(quality, 1080)
 
     if mute_audio:
@@ -89,7 +89,7 @@ def get_video_opts(url, quality, mute_audio=False):
         merge_format = "mp4"
     else:
         format_str = f"bestvideo[height={target_height}]+bestaudio/best[height={target_height}]/best"
-        merge_format = "mkv" if quality == "4k" else "mp4"
+        merge_format = "mkv" if quality in ("4k", "2k") else "mp4"
 
     return {
         "format": format_str,
@@ -300,7 +300,7 @@ def main():
 
                 quality = questionary.select(
                     "Select video quality:",
-                    choices=["4k", "1080p", "720p", "480p", "360p"],
+                    choices=["4k", "2k", "1080p", "720p", "480p", "360p"],
                 ).ask()
 
                 if quality is None:
